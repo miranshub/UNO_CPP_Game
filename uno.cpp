@@ -1,5 +1,5 @@
-//completely playable UNO game made by Miran
-//checking "git push origin main" // attempt 1 failed //attempt 2, passed, master instead
+// completely playable UNO game made by Miran
+// comments deleted
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -12,12 +12,13 @@ typedef struct card
 } cd;
 
 vector<cd> cards;
-
 vector<int> deck;
-vector<int> decko_chamber;
 vector<vector<int>> players = {{0}, {0}, {0}, {0}};
 
+vector<int> decko_chamber;
+
 int turn = 0;
+
 int debt = 0;
 bool rotation = true;
 bool skip_player = false;
@@ -31,7 +32,6 @@ bool deck_print = false;
 void cards_init();
 void cards_distribute();
 
-bool not_game_end();
 
 void print_stack_front();
 void print_player_cards(int, int);
@@ -47,6 +47,7 @@ void waiting();
 
 void game();
 void gameplay();
+bool not_game_end();
 void game_end();
 
 int main()
@@ -97,7 +98,6 @@ void gameplay()
         while (movement != 's')
         {
             system("cls");
-            // cout << "\n\n\n"; //this line was added for debugging process
 
             print_stack_front();
             print_player_cards(turn, pointer);
@@ -138,15 +138,20 @@ void gameplay()
                 }
                 else if (count < 1)
                 {
-                    // cout << "\t\t\t3" << endl; //this line was added for debugging process
-                    debt++;
+                    
+                    if(!((cards[deck.front()].type == false) && (cards[deck.front()].num == 4)) && !((cards[deck.front()].type == false) && (cards[deck.front()].num == 2))) {
+                    // if(!((cards[deck.front()].type == false) && (cards[deck.front()].num == 4))) {
+                        cout << "+2/+4\n";
+                        // waiting();
+                        debt++;
+                    }
+                    // waiting();
                     penalty();
                     pointer = players[turn].size() - 1;
                     count++;
                     movement = 'w';
                 }
                 break;
-            // cout << "\t\t\t4" << endl; //this line was added for debugging process
             case 'u':
                 uno_call = !uno_call;
                 break;
@@ -233,7 +238,6 @@ void gameplay()
 
             turn_modify();
         }
-
     }
 
     game_end();
@@ -243,40 +247,23 @@ void gameplay()
 
 bool check_deck(int pointer)
 {
-    // return (cards[players[turn][pointer]].color == cards[deck.front()].color ||  cards[players[turn][pointer]].num == cards[deck.front()].num || (!(cards[players[turn][pointer]].type) && (cards[players[turn][pointer]].num  > 3)));
-
-    // if (!cards[players[turn][pointer]].type && cards[players[turn][pointer]].num > 3)
-    // {
-    //     return true;
-    // }
-
-    // return ((cards[players[turn][pointer]].color == cards[deck.front()].color) || (cards[players[turn][pointer]].num == cards[deck.front()].num));
     int itr = 0;
-    // cout << "\t\t\t\t pointer: " << pointer << endl; //this line was added for debugging process
-    // cout << "\t\t\t\t turn: " << turn << endl; //this line was added for debugging process
-    // cout << "\t\t\t\t players[turn][pointer]: " << players[turn][pointer] << endl; //this line was added for debugging process
-    // cout << "\t\t\t\t cards[players[turn][pointer]].type: " << cards[players[turn][pointer]].type << endl; //this line was added for debugging process
     if (cards[players[turn][pointer]].type == false)
     {
         if (cards[players[turn][pointer]].num > 3)
         {
-            // cout << "\t\t\t\t cards[players[turn][pointer]].type: false__" << endl; //this line was added for debugging process
             itr = 1;
-            // cout << "\t\t\tcond: " << itr << endl; //this line was added for debugging process
             return true;
         }
         else
         {
-            // cout << "\t\t\t\t cards[players[turn][pointerd]].type: false__" << endl; //this line was added for debugging process
             itr = 2;
-            // cout << "\t\t\tcocnd" << itr << endl; //this line was added for debugging process
             return (cards[players[turn][pointer]].color == cards[deck.front()].color || cards[players[turn][pointer]].num == cards[deck.front()].num);
         }
     }
     else
     {
         itr = 3;
-        // cout << "\t\t\tcocnd" << itr << endl; //this line was added for debugging process
         if (cards[deck.front()].type == false)
         {
             return (cards[players[turn][pointer]].color == cards[deck.front()].color);
@@ -285,7 +272,6 @@ bool check_deck(int pointer)
         {
             return ((cards[players[turn][pointer]].color == cards[deck.front()].color) || (cards[players[turn][pointer]].num == cards[deck.front()].num));
         }
-        // if()
     }
 }
 
@@ -472,14 +458,13 @@ void print_stack_front()
     cout << endl
          << "\t";
     print_card(deck.front(), false);
-    // cout << endl;
     cout << "\t\tsizes: " << players[0].size() << " " << players[1].size() << " " << players[2].size() << " " << players[3].size();
     cout << endl;
-        cout << "\t\t\t\t       ";
-        for (int i = 0; i < turn; i++)
-        {
-            cout << "  ";
-        }
+    cout << "\t\t\t\t       ";
+    for (int i = 0; i < turn; i++)
+    {
+        cout << "  ";
+    }
 
     if (uno_call || game_ended)
     {
@@ -492,13 +477,10 @@ void print_stack_front()
             cout << "X";
         }
     }
-        else {
-            cout << "_";
-
-        }
-        
-        
-    // }
+    else
+    {
+        cout << "_";
+    }
 
     cout << endl;
     deck_print = false;
@@ -506,37 +488,23 @@ void print_stack_front()
 
 void print_player_cards(int player, int pointer)
 {
-    // int index = 0;
-    // for (auto player_tbp : players)
-    // {
-    // cout << "player " << index << ": " << players[index].size() << endl;
     cout << "player " << player + 1 << ": " << players[player].size() << endl;
-    // for (int card_number : player)
     for (int card_number : players[player])
     {
         print_card(card_number, true);
     }
     cout << endl;
-    // for (int card_number : player)
     for (int card_number : players[player])
     {
         print_card(card_number, false);
     }
     cout << endl;
 
-    // if (index == player)
-    // {
-
-    // cout << "xx";
     for (int i = 0; i < pointer; i++)
     {
         cout << "  \t";
     }
     cout << "-----" << endl;
-    // }
-    // cout << endl;
-    // index++;
-    // }
     return;
 }
 
@@ -554,24 +522,19 @@ void print_card(int id, bool line)
             switch (cards[id].num)
             {
             case 0:
-                // reverse
                 cout << "rev\t";
                 break;
             case 1:
-                // skip
                 cout << "skip\t";
                 break;
             case 2:
-                // pick 2
                 cout << "pick2\t";
                 break;
 
             case 4:
-                // wild +pick 4
                 cout << "wild4\t";
                 break;
             case 5:
-                // wild
                 cout << "wild\t";
                 break;
 
@@ -595,58 +558,7 @@ void print_card(int id, bool line)
     {
         cout << "\t";
     }
-
-    // if (cards[id].type)
-    // {
-    //     cout << cards[id].num;
-    //     color_print(cards[id].color);
-    // }
-
-    // else
-    // {
-    //     if (cards[id].num == 4)
-    //     {
-    //         cout << "wild pick +4";
-    //     }
-
-    //     else if (cards[id].num == 5)
-    //     {
-    //         cout << "wild";
-    //     }
-
-    //     else
-    //     {
-    //         switch (cards[id].num)
-    //         {
-    //         case 0:
-    //             cout << "reverse";
-    //             break;
-    //         case 1:
-    //             cout << "skip";
-    //             break;
-    //         case 2:
-    //             cout << "pick +2";
-    //             break;
-
-    //         default:
-    //             break;
-    //         }
-    //         color_print(cards[id].color);
-    //     }
-    // }
-    // cout << "\n";
 }
 
-// error debugged
-/*
-skip: before putting card into stack the turn value is changed henceskip card never poped from the players[turn][pointer]
-
-//error to be debug : debugged
-/*
-2 for +2d
-0 can be putted on reverse, reverse card has number 0 but type 0
-5 can be putted on wild
-and somewhere debt issue
-
-//debugged
-*/
+// after everything debugged, I found one bug, +4 Color, if not present color bro had to pick 5 cards proly //bug fixed
+// confusion: suppose +2 on deck
