@@ -1,5 +1,5 @@
 //completely playable UNO game made by Miran
-//checking "git push origin main"
+//checking "git push origin main" // attempt 1 failed
 
 #include <bits/stdc++.h>
 using namespace std;
