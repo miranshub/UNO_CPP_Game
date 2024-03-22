@@ -561,4 +561,4 @@ void print_card(int id, bool line)
 }
 
 // after everything debugged, I found one bug, +4 Color, if not present color bro had to pick 5 cards proly //bug fixed
-// confusion: suppose +2 on deck
+// confusion: suppose +2 on deck // reviewed and fixed, just need confirmation
