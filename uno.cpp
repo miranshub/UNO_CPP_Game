@@ -1,5 +1,6 @@
 // completely playable UNO game made by Miran
 // comments deleted
+// uno version2
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -13,7 +14,8 @@ typedef struct card
 
 vector<cd> cards;
 vector<int> deck;
-vector<vector<int>> players = {{0}, {0}, {0}, {0}};
+vector<vector<int>> players = {{}, {}, {}, {}};
+vector<string> player_names;
 
 vector<int> decko_chamber;
 
@@ -24,14 +26,12 @@ bool rotation = true;
 bool skip_player = false;
 bool wild_card = false;
 bool uno_call = false;
-bool games_played = false;
 bool game_ended = false;
 
 bool deck_print = false;
 
 void cards_init();
 void cards_distribute();
-
 
 void print_stack_front();
 void print_player_cards(int, int);
@@ -62,15 +62,16 @@ int main()
 
 void game()
 {
+    cards_init();
     do
     {
         game_ended = false;
 
-        cards_init();
+        cards_distribute();
         gameplay();
 
         string trash;
-        cout << "to exit press 'e'\nto play again press any key";
+        cout << "to exit press 'e'\nto play again press any key: ";
         char ch = 't';
         cin >> ch;
         getline(cin, trash);
@@ -138,9 +139,10 @@ void gameplay()
                 }
                 else if (count < 1)
                 {
-                    
-                    if(!((cards[deck.front()].type == false) && (cards[deck.front()].num == 4)) && !((cards[deck.front()].type == false) && (cards[deck.front()].num == 2))) {
-                    // if(!((cards[deck.front()].type == false) && (cards[deck.front()].num == 4))) {
+
+                    if (!((cards[deck.front()].type == false) && (cards[deck.front()].num == 4)) && !((cards[deck.front()].type == false) && (cards[deck.front()].num == 2)))
+                    {
+                        // if(!((cards[deck.front()].type == false) && (cards[deck.front()].num == 4))) {
                         cout << "+2/+4\n";
                         // waiting();
                         debt++;
@@ -313,51 +315,40 @@ void penalty()
 
 void cards_init()
 {
-    if (!games_played)
+    cards.clear();
+    string colors = "rgby";
+    int id_number = 0;
+    for (int i = 0; i < 4; i++)
     {
-        cards.clear();
-        string colors = "rgby";
-        int id_number = 0;
-        for (int i = 0; i < 4; i++)
+        for (int j = 1; j < 20; j++)
         {
-            for (int j = 1; j < 20; j++)
-            {
-                cd *card_x = new cd;
-                card_x->type = true;
-                card_x->num = j / 2;
-                card_x->color = colors[i];
+            cd *card_x = new cd;
+            card_x->type = true;
+            card_x->num = j / 2;
+            card_x->color = colors[i];
 
-                cards.push_back(*card_x);
-            }
-
-            for (int j = 0; j < 6; j++)
-            {
-                cd *card_x = new cd;
-                card_x->type = false;
-                card_x->num = j / 2;
-                card_x->color = colors[i];
-
-                cards.push_back(*card_x);
-            }
+            cards.push_back(*card_x);
         }
 
-        for (int i = 0; i < 8; i++)
+        for (int j = 0; j < 6; j++)
         {
             cd *card_x = new cd;
             card_x->type = false;
-            card_x->num = (i / 4) + 4;
-            card_x->color = colors[0];
+            card_x->num = j / 2;
+            card_x->color = colors[i];
 
             cards.push_back(*card_x);
         }
     }
 
-    cards_distribute();
-
-    while (!cards[deck[0]].type)
+    for (int i = 0; i < 8; i++)
     {
-        deck.push_back(deck.front());
-        deck.erase(deck.begin());
+        cd *card_x = new cd;
+        card_x->type = false;
+        card_x->num = (i / 4) + 4;
+        card_x->color = colors[0];
+
+        cards.push_back(*card_x);
     }
 
     return;
@@ -391,6 +382,8 @@ void cards_distribute()
     }
 
     deck.clear();
+    players.clear();
+    players = {{}, {}, {}, {}};
 
     for (int i = 0; i < 108; i++)
     {
@@ -398,6 +391,8 @@ void cards_distribute()
         deck.push_back(arr[idx]);
         arr.erase(arr.begin() + idx);
     }
+
+    arr.clear();
 
     for (int i = 0; i < 7; i++)
     {
@@ -407,9 +402,11 @@ void cards_distribute()
             deck.pop_back();
         }
     }
-    for (int i = 0; i < 4; i++)
+
+    while (!cards[deck[0]].type)
     {
-        players[i].erase(players[i].begin());
+        deck.push_back(deck.front());
+        deck.erase(deck.begin());
     }
     return;
 }
@@ -422,7 +419,6 @@ bool not_game_end()
 void game_end()
 {
     game_ended = true;
-    games_played = true;
     system("cls");
     int idx = 0;
     bool found_winner = false;
