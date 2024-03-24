@@ -1,6 +1,5 @@
 // completely playable UNO game made by Miran
-// comments deleted
-// uno version2
+// uno version 1
 
 #include <bits/stdc++.h>
 using namespace std;
